@@ -1,0 +1,45 @@
+﻿@model ProductManagement.Models.Product
+
+@{
+    ViewBag.Title = "Edit Product";
+    var categories = ViewBag.Categories as List<ProductManagement.Models.Category>;
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4">@ViewBag.Title</h2>
+
+    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+    @using (Html.BeginForm("Edit", "Product", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.ProductID)
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Name, new { @class = "form-label fw-semibold" })
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Description, new { @class = "form-label fw-semibold" })
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 3 })
+            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Price, new { @class = "form-label fw-semibold" })
+            @Html.TextBoxFor(m => m.Price, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.StockQuantity, new { @class = "form-label fw-semibold" })
+            @Html.TextBoxFor(m => m.StockQuantity, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.StockQuantity, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-success">Update Product</button>
+        <a href="@Url.Action("Index", "Product")" class="btn btn-outline-secondary ms-2">Cancel</a>
+    }
+</div>

@@ -1,0 +1,53 @@
+﻿@model ProductManagement.Models.Product
+
+@{
+    ViewBag.Title = "Add New Product";
+    var categories = ViewBag.Categories as List<ProductManagement.Models.Category>;
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+@using (Html.BeginForm("Create", "Product", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+    </div>
+    <br />
+    <div>
+        @Html.Label("CategoryID", "Select Category")
+        <select name="CategoryID" class="form-control" required>
+            <option value="">-- Select a Category --</option>
+            @foreach (var category in categories)
+            {
+                <option value="@category.CategoryID">@category.CategoryName</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div>
+        @Html.LabelFor(m => m.Description)
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+    </div>
+    <br />
+    <div>
+        @Html.LabelFor(m => m.Price)
+        @Html.TextBoxFor(m => m.Price, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+    </div>
+    <br />
+    <div>
+        @Html.LabelFor(m => m.StockQuantity)
+        @Html.TextBoxFor(m => m.StockQuantity, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.StockQuantity, "", new { @class = "text-danger" })
+    </div>
+
+    <br />
+    <input type="submit" value="Save" class="btn btn-primary" />
+}

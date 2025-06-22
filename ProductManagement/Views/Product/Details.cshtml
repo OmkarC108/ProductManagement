@@ -1,0 +1,111 @@
+﻿@model ProductManagement.Models.Product
+
+@{
+    ViewBag.Title = "Product Details";
+    var reviews = Model.ProductReviews.ToList();
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">@Model.Name</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Product Information</h5>
+            <hr />
+            <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Price:</strong> ₹@Model.Price</p>
+            <p><strong>Stock:</strong> @Model.StockQuantity</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Place an Order</h5>
+            <hr />
+            @using (Html.BeginForm("PlaceOrder", "Order", FormMethod.Post))
+            {
+                @Html.Hidden("productId", Model.ProductID)
+
+                <div class="form-group mb-2">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" class="form-control w-25" min="1" value="1" required />
+                </div>
+                <button type="submit" class="btn btn-success mt-2">Order</button>
+            }
+
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-info mt-3">@TempData["Message"]</div>
+            }
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Customer Reviews</h5>
+            <hr />
+            @if (reviews.Any())
+            {
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Rating</th>
+                            <th>Comment</th>
+                            <th>Sentiment</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < reviews.Count; i++)
+                        {
+                            var r = reviews[i];
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@r.Rating</td>
+                                <td>@r.Comment</td>
+                                <td>@r.Sentiment</td>
+                                <td>@r.CreatedAt.ToString("dd-MM-yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No reviews yet.</p>
+            }
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Leave a Review</h5>
+            <hr />
+            @using (Html.BeginForm("AddReview", "Review", FormMethod.Post))
+            {
+                @Html.Hidden("ProductID", Model.ProductID)
+                @Html.Hidden("UserID", 1)
+
+                <div class="form-group mb-2">
+                    <label>Rating (1–5):</label>
+                    <input type="number" name="Rating" class="form-control w-25" min="1" max="5" required />
+                </div>
+
+                <div class="form-group mb-2">
+                    <label>Comment:</label>
+                    <textarea name="Comment" class="form-control" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            }
+
+            @if (TempData["ReviewMessage"] != null)
+            {
+                <div class="alert alert-info mt-3">@TempData["ReviewMessage"]</div>
+            }
+        </div>
+    </div>
+
+    <a href="@Url.Action("Index", "Product")" class="btn btn-outline-secondary">← Back to Product List</a>
+</div>

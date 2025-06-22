@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ProductManagement.Models.Category>
+@{
+    ViewBag.Title = "Categories";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4">Category List</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Category Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var mod in Model)
+            {
+                <tr>
+                    <td>@mod.CategoryName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("Create", "Category")" class="btn btn-success mt-3">Add New Category</a>
+</div>

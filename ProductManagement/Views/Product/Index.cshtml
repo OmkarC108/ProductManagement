@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ProductManagement.Models.Product>
+@{
+    ViewBag.Title = "Product List";
+    var categories = ViewBag.Categories as List<ProductManagement.Models.Category>;
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4">Product List</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Filter Products</h5>
+            @using (Html.BeginForm("Index", "Product", FormMethod.Get))
+            {
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <input type="text" name="name" class="form-control" placeholder="Search name or description" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="minPrice" class="form-control" placeholder="Min Price" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="maxPrice" class="form-control" placeholder="Max Price" />
+                    </div>
+                    <div class="col-md-3">
+                        <select name="categoryId" class="form-select">
+                            <option value="">-- Category --</option>
+                            @foreach (var c in categories)
+                            {
+                                <option value="@c.CategoryID">@c.CategoryName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-outline-primary w-100">Filter</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Price (₹)</th>
+                <th>Stock</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price</td>
+                    <td>@item.StockQuantity</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ProductID }, new { @class = "btn btn-sm btn-warning me-1" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ProductID }, new { @class = "btn btn-sm btn-danger me-1" })
+                        @Html.ActionLink("Details", "Details", new { id = item.ProductID }, new { @class = "btn btn-sm btn-info" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("Create", "Product")" class="btn btn-success mt-3">Add New Product</a>
+</div>
